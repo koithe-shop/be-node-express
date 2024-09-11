@@ -1,0 +1,41 @@
+import express, { Application } from 'express';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import mongoose from 'mongoose';
+import { setupSwagger } from './swagger';
+
+// import route tai day nhe "my love"
+import userRoutes from './routes/userRoutes';
+import roleRoutes from './routes/roleRoutes';
+
+dotenv.config();
+
+const app: Application = express();
+
+// Thiết lập Swagger
+setupSwagger(app);
+
+// Kết nối đến MongoDB
+const mongoUri = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/koiTheShop';
+mongoose.connect(mongoUri)
+    .then(() => {
+        console.log('Connected to MongoDB');
+    }).catch((err) => {
+        console.error('Error connecting to MongoDB:', err);
+    });
+
+app.use(cors());
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+// route tai day nhe
+app.use('/api/roles', roleRoutes);
+app.use('/api/users', userRoutes);
+
+module.exports = app;
