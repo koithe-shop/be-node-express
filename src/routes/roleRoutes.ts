@@ -12,10 +12,6 @@ const router = Router();
  *     responses:
  *       200:
  *         description: List of roles
- *         content:
- *           application/json:
- *             schema:
- *               type: array
  *   post:
  *     summary: Create a new role
  *     tags: [Role]
@@ -25,15 +21,12 @@ const router = Router();
  *         application/json:
  *           schema:
  *             type: object
+ *             properties:
+ *               roleName:
+ *                 type: string
  *     responses:
  *       201:
  *         description: role created successfully
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *       400:
- *         description: Bad request
  */
 router.route("/")
     .get(getAllRoles)
