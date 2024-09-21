@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { createRole, getAllRoles } from '../controllers/roleController';
+import { authenticateJWT, isManager } from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -29,7 +30,7 @@ const router = Router();
  *         description: role created successfully
  */
 router.route("/")
-    .get(getAllRoles)
-    .post(createRole)
+    .get(authenticateJWT, isManager, getAllRoles)
+    .post(authenticateJWT, isManager, createRole)
 
 export default router;

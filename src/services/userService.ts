@@ -1,15 +1,44 @@
 import { Error } from 'mongoose';
 import { User, IUser } from '../models/userModel';
+import { Role } from '../models/roleModel';
 import bcrypt from 'bcrypt';
 import { generateToken } from '../utils/jwtUtils';
 
 export class UserService {
+    // Kiem tra la manager
+    static async isManager(userId: IUser["_id"]) {
+        const managerRole = await Role.findOne({ roleName: 'Manager' });
+        const user = await User.findOne({ _id: userId, roleId: managerRole?._id });
+        if (user) return true;
+        else return false;
+    }
+
     // Lấy tất cả người dùng
     static async getAllUsers() {
         const userList = await User.find()
             .select('-password') // Loại bỏ trường password
             .populate('roleId'); // Nếu bạn muốn populate roleId
         return userList; // Lấy tất cả người dùng
+    }
+
+    // Lấy tất cả staff
+    static async getAllStaffs() {
+        // Tìm roleId tương ứng với role 'staff'
+        const staffRole = await Role.findOne({ roleName: 'Staff' });
+        const staffList = await User.find({ roleId: staffRole?._id })
+            .select('-password') // Loại bỏ trường password
+            .populate('roleId'); // Nếu bạn muốn populate roleId
+        return staffList; // Lấy tất cả staff
+    }
+
+    // Lấy tất cả customer
+    static async getAllCustomers() {
+        // Tìm roleId tương ứng với role 'customer'
+        const customerRole = await Role.findOne({ roleName: 'Customer' });
+        const customerList = await User.find({ roleId: customerRole?._id })
+            .select('-password') // Loại bỏ trường password
+            .populate('roleId'); // Nếu bạn muốn populate roleId
+        return customerList; // Lấy tất cả customer
     }
 
     // Lấy người dùng theo id
@@ -39,6 +68,44 @@ export class UserService {
         // Trả về thông tin người dùng mới, nhưng không bao gồm password
         const { password: _, ...userWithoutPassword } = newUser.toObject();
         return { userWithoutPassword, msg: "Create user successfully" };
+    }
+
+    // Tạo một staff mới
+    static async createStaff(userData: IUser) {
+        const staffRole = await Role.findOne({ roleName: 'Staff' });
+        const { fullName, username, password, phoneNumber, address } = userData;
+        if (!fullName || !username || !password || !phoneNumber || !address) {
+            throw new Error("All fields are required.")
+        }
+        const checkUsername = await User.findOne({ username });
+        if (checkUsername) {
+            throw new Error("Username is existed.")
+        }
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newStaff = await User.create({ ...userData, password: hashedPassword, roleId: staffRole?._id });
+
+        // Trả về thông tin staff mới, nhưng không bao gồm password
+        const { password: _, ...staffWithoutPassword } = newStaff.toObject();
+        return { staffWithoutPassword, msg: "Create staff successfully" };
+    }
+
+    // Tạo một customer mới
+    static async createCustomer(userData: IUser) {
+        const customerRole = await Role.findOne({ roleName: 'Customer' });
+        const { fullName, username, password, phoneNumber, address } = userData;
+        if (!fullName || !username || !password || !phoneNumber || !address) {
+            throw new Error("All fields are required.")
+        }
+        const checkUsername = await User.findOne({ username });
+        if (checkUsername) {
+            throw new Error("Username is existed.")
+        }
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const newCustomer = await User.create({ ...userData, password: hashedPassword, roleId: customerRole?._id });
+
+        // Trả về thông tin staff mới, nhưng không bao gồm password
+        const { password: _, ...customerWithoutPassword } = newCustomer.toObject();
+        return { customerWithoutPassword, msg: "Create customer successfully" };
     }
 
     // Thay đổi trạng thái người dùng

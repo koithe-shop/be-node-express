@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken } from '../utils/jwtUtils';
+import { UserService } from '../services/userService';
 
 export const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers['authorization'];
@@ -19,3 +20,13 @@ export const authenticateJWT = (req: Request, res: Response, next: NextFunction)
         res.sendStatus(401); // Unauthorized
     }
 };
+
+export const isManager = async (req: Request, res: Response, next: NextFunction) => {
+    const user = (req as any).user;
+    const isManager = await UserService.isManager(user.userId);
+    if (isManager) {
+        next();
+    } else {
+        res.sendStatus(403); // Forbidden
+    }
+}

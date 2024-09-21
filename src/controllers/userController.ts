@@ -11,6 +11,26 @@ export const getAllUsers = async (req: Request, res: Response) => {
     }
 };
 
+// Lấy tất cả staff
+export const getAllStaffs = async (req: Request, res: Response) => {
+    try {
+        const staffs = await UserService.getAllStaffs();
+        res.status(200).json(staffs);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Lấy tất cả customer
+export const getAllCustomers = async (req: Request, res: Response) => {
+    try {
+        const staffs = await UserService.getAllCustomers();
+        res.status(200).json(staffs);
+    } catch (error: any) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 // Lấy người dùng theo Id
 export const getUserById = async (req: Request, res: Response) => {
     try {
@@ -25,6 +45,26 @@ export const getUserById = async (req: Request, res: Response) => {
 export const createUser = async (req: Request, res: Response) => {
     try {
         const newUser = await UserService.createUser(req.body);
+        res.status(201).json(newUser);
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+// Tạo một staff mới
+export const createStaff = async (req: Request, res: Response) => {
+    try {
+        const newUser = await UserService.createStaff(req.body);
+        res.status(201).json(newUser);
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+// Tạo một customer mới
+export const createCustomer = async (req: Request, res: Response) => {
+    try {
+        const newUser = await UserService.createCustomer(req.body);
         res.status(201).json(newUser);
     } catch (error: any) {
         res.status(400).json({ message: error.message });
