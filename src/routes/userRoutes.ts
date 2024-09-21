@@ -1,5 +1,6 @@
 import { Router } from 'express';
-import { createUser, getAllUsers, getUserById, changeStatus, login } from '../controllers/userController';
+import * as UserController from '../controllers/userController';
+import { authenticateJWT, isManager } from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -39,8 +40,82 @@ const router = Router();
  *         description: User created successfully
  */
 router.route("/")
-    .get(getAllUsers)
-    .post(createUser)
+    .get(authenticateJWT, isManager, UserController.getAllUsers)
+    .post(authenticateJWT, isManager, UserController.createUser)
+
+/**
+ * @swagger
+ * /users/staff:
+ *   get:
+ *     summary: Get all staffs
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: Get staffs list successfully
+ *   post:
+ *     summary: Create a new staff
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               fullName:
+ *                 type: string
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               phoneNumber:
+ *                 type: string
+ *               address:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Staff created successfully
+ */
+router.route("/staff")
+    .get(authenticateJWT, isManager, UserController.getAllStaffs)
+    .post(authenticateJWT, isManager, UserController.createStaff)
+
+/**
+* @swagger
+* /users/customer:
+*   get:
+*     summary: Get all customers
+*     tags: [User]
+*     responses:
+*       200:
+*         description: Get customers list successfully
+*   post:
+*     summary: Create a new customer
+*     tags: [User]
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               fullName:
+*                 type: string
+*               username:
+*                 type: string
+*               password:
+*                 type: string
+*               phoneNumber:
+*                 type: string
+*               address:
+*                 type: string
+*     responses:
+*       201:
+*         description: Customer created successfully
+*/
+router.route("/customer")
+    .get(authenticateJWT, UserController.getAllCustomers)
+    .post(UserController.createCustomer)
 
 /**
 * @swagger
@@ -64,7 +139,7 @@ router.route("/")
 *         description: Login successful
 */
 router.route("/login")
-    .post(login)
+    .post(UserController.login)
 
 /**
 * @swagger
@@ -95,7 +170,7 @@ router.route("/login")
 *          description: Change status   successfully
 */
 router.route("/:userId")
-    .get(getUserById)
-    .delete(changeStatus)
+    .get(authenticateJWT, UserController.getUserById)
+    .delete(authenticateJWT, isManager, UserController.changeStatus)
 
 export default router;
