@@ -14,7 +14,7 @@ import roleRoutes from './routes/roleRoutes';
 import productRoutes from './routes/productRoutes';
 import categoryRoutes from './routes/categoryRoutes';
 import genotypeRoutes from './routes/genotypeRoutes';
-
+import couponRoutes from './routes/couponRoutes';
 
 dotenv.config();
 
@@ -45,5 +45,5 @@ app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes); // Category routes
 app.use('/api/genotypes', genotypeRoutes);  // Genotype routes
-
+app.use('/api/coupons', couponRoutes);
 module.exports = app;
