@@ -7,9 +7,14 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import { setupSwagger } from './swagger';
 
+
 // import route tai day nhe "my love"
 import userRoutes from './routes/userRoutes';
 import roleRoutes from './routes/roleRoutes';
+import productRoutes from './routes/productRoutes';
+import categoryRoutes from './routes/categoryRoutes';
+import genotypeRoutes from './routes/genotypeRoutes';
+import couponRoutes from './routes/couponRoutes';
 import orderRoutes from './routes/orderRoutes';
 
 dotenv.config();
@@ -38,6 +43,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 // route tai day nhe
 app.use('/api/roles', roleRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/categories', categoryRoutes); // Category routes
+app.use('/api/genotypes', genotypeRoutes);  // Genotype routes
+app.use('/api/coupons', couponRoutes);
 app.use('/api/orders', orderRoutes);
 
 module.exports = app;
