@@ -10,6 +10,7 @@ import { setupSwagger } from './swagger';
 // import route tai day nhe "my love"
 import userRoutes from './routes/userRoutes';
 import roleRoutes from './routes/roleRoutes';
+import orderRoutes from './routes/orderRoutes';
 
 dotenv.config();
 
@@ -37,5 +38,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // route tai day nhe
 app.use('/api/roles', roleRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/orders', orderRoutes);
 
 module.exports = app;
