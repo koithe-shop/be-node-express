@@ -10,3 +10,23 @@ export const getAllOrders = async (req: Request, res: Response) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// Lấy order theo id
+export const getOrdersById = async (req: Request, res: Response) => {
+    try {
+        const order = await OrderService.getOrdersById(req.params.orderId);
+        res.status(200).json(order);
+    } catch (error: any) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
+// Tạo một order mới
+export const createOrder = async (req: Request, res: Response) => {
+    try {
+        const newOrder = await OrderService.createOrder(req.body);
+        res.status(201).json(newOrder);
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
+    }
+};

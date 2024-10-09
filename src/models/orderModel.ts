@@ -10,7 +10,7 @@ interface Product {
 
 export interface IOrder extends Document {
     userId: IUser["_id"],
-    couponId: ICoupon["_id"],
+    couponId?: ICoupon["_id"],
     date: Date,
     totalPrice: Number,
     status: Number,
