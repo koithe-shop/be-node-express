@@ -11,7 +11,6 @@ interface Product {
 export interface IOrder extends Document {
     userId: IUser["_id"],
     couponId?: ICoupon["_id"],
-    date: Date,
     totalPrice: Number,
     status: Number,
     paymentStatus: Number,
@@ -28,11 +27,6 @@ const orderSchema: Schema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Coupon', // Reference to the Coupon model
         required: false
-    },
-    date: {
-        type: Date,
-        required: true,
-        default: Date.now
     },
     totalPrice: {
         type: Number,

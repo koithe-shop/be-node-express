@@ -48,7 +48,6 @@ export class OrderService {
         const newOrder = await Order.create({
             userId,
             couponId,
-            date: new Date(),
             totalPrice: totalFinal,
             status: 1,
             paymentStatus: 1,

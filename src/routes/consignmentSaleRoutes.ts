@@ -1,0 +1,65 @@
+import { Router } from 'express';
+import * as ConsignmentSaleController from '../controllers/consignmentSaleController';
+import { authenticateJWT, isManager } from '../middlewares/authMiddleware';
+
+const router = Router();
+
+/**
+ * @swagger
+ * /consignment_sale:
+ *   get:
+ *     summary: Get all consignment_sale
+ *     tags: [Consignment Sale]
+ *     responses:
+ *       200:
+ *         description: Get consignment_sale list successfully
+ *   post:
+ *     summary: Create a new onsignment_sale
+ *     tags: [Consignment Sale]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *               productId:
+ *                 type: string
+ *               saleType:
+ *                 type: string
+ *               priceAgreed:
+ *                 type: number
+ *               inspectionStatus:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Consignment sale created successfully
+ */
+router.route("/")
+    .get(ConsignmentSaleController.getAllConsignmentSale)
+    .post(ConsignmentSaleController.createConsignmentSale)
+
+/**
+* @swagger
+* /consignment_sale/{consignmentSaleId}:
+*   get:
+*     summary: Get a consignment sale by ID
+*     tags: [Consignment Sale]
+*     parameters:
+*       - in: path
+*         name: consignmentSaleId
+*         required: true
+*         schema:
+*           type: string
+*     responses:
+*       200:
+*         description: Consignment sale retrieved successfully
+*/
+router.route("/:consignmentSaleId")
+    .get(ConsignmentSaleController.getConsignmentSaleById)
+
+export default router;
