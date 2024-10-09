@@ -7,14 +7,16 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import { setupSwagger } from './swagger';
 
-
-// import route tai day nhe "my love"
+// import route tai day nhe
 import userRoutes from './routes/userRoutes';
 import roleRoutes from './routes/roleRoutes';
 import productRoutes from './routes/productRoutes';
 import categoryRoutes from './routes/categoryRoutes';
 import genotypeRoutes from './routes/genotypeRoutes';
 import couponRoutes from './routes/couponRoutes';
+import orderRoutes from './routes/orderRoutes';
+import consignmentSaleRoutes from './routes/consignmentSaleRoutes';
+import consignmentCareRoutes from './routes/consignmentCareRoutes';
 
 dotenv.config();
 
@@ -46,4 +48,8 @@ app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes); // Category routes
 app.use('/api/genotypes', genotypeRoutes);  // Genotype routes
 app.use('/api/coupons', couponRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/consignment_sale', consignmentSaleRoutes);
+app.use('/api/consignment_care', consignmentCareRoutes);
+
 module.exports = app;
