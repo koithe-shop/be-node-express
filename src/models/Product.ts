@@ -8,7 +8,8 @@ interface ICertificates {
 
 export interface IProduct extends Document {
     productName: string;
-    status: number;
+    ownerId?: mongoose.Types.ObjectId;
+    status: string;
     madeBy: string;
     gender: boolean;
     size: number;
@@ -26,7 +27,20 @@ export interface IProduct extends Document {
 
 const productSchema: Schema = new Schema({
     productName: { type: String, required: true },
-    status: { type: Number, required: true },
+    ownerId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    status: {
+        type: String,
+        enum: [
+            "Available",
+            "Sold",
+            "Unavailable",
+            "Consigned Sale",
+            "Consigned Sold",
+            "Consigned Care",
+            "Consigned Returned"
+        ],
+        required: true
+    },
     madeBy: { type: String, required: true },
     gender: { type: Boolean, required: true },
     size: { type: Number, required: true },
