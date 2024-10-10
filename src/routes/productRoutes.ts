@@ -2,13 +2,14 @@ import { Router } from 'express';
 import { ProductController } from '../controllers/productController';
 const router: Router = Router();
 
-router.post('/',  ProductController.createProduct);
+router.post('/', ProductController.createProduct);
 router.get('/', ProductController.getAllProducts);
 router.get('/:id', ProductController.getProductById);
-router.put('/:id',  ProductController.updateProduct);
+router.put('/:id', ProductController.updateProduct);
 router.delete('/:id', ProductController.deleteProduct);
 
 export default router;
+
 /**
  * @swagger
  * components:
@@ -27,9 +28,12 @@ export default router;
  *         productName:
  *           type: string
  *           description: Name of the product
+ *         ownerId:
+ *           type: string
+ *           description: The ID of the owner of the product
  *         status:
- *           type: number
- *           description: Status of the product (e.g., available, sold)
+ *           type: string
+ *           description: Status of the product (Available, Sold, Unavailable, etc.)
  *         madeBy:
  *           type: string
  *           description: Manufacturer or creator of the product
@@ -157,13 +161,24 @@ export default router;
  *         schema:
  *           type: string
  *         required: true
- *         description: Product ID
+ *         description: The ID of the product to update
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/Product'
+ *           examples:
+ *             valid:
+ *               summary: Example of a valid product update
+ *               value:
+ *                 productName: "Updated Product"
+ *                 status: "Sold"
+ *                 madeBy: "Updated Manufacturer"
+ *                 gender: true
+ *                 size: 12
+ *                 yob: 2021
+ *                 price: 150
  *     responses:
  *       200:
  *         description: Product updated successfully
@@ -171,11 +186,20 @@ export default router;
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Product'
+ *       400:
+ *         description: Bad request. Invalid status transition or missing required fields
  *       404:
  *         description: Product not found
- *       400:
- *         description: Bad request
+ *       422:
+ *         description: Unprocessable entity. Invalid status transition
+ *     description: |
+ *       Updates a product's information. The following status transitions are allowed:
+ *       - **Available** -> Unavailable, Sold, Consigned Sale, Consigned Care
+ *       - **Consigned Sale** -> Consigned Sold
+ *       - **Consigned Care** -> Consigned Returned
+ *       - **Unavailable** -> Cannot be updated to any other status
  */
+
 
 /**
  * @swagger
@@ -196,3 +220,4 @@ export default router;
  *       404:
  *         description: Product not found
  */
+

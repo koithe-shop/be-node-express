@@ -10,15 +10,16 @@ export class ProductController {
             if (!productName || !status || !madeBy || gender == null || !size || !yob || !price) {
                 return res.status(400).json({ message: 'Missing required fields' });
             }
-    
+
             // Tạo sản phẩm
             const product = await ProductService.createProduct(req.body);
-            res.status(201).json(product); // product đã chứa thông tin category
+            res.status(201).json(product);
         } catch (error) {
             const errorMessage = (error as Error).message;
             res.status(400).json({ message: errorMessage });
         }
     }
+
     static async getAllProducts(req: Request, res: Response) {
         try {
             const products = await ProductService.getAllProducts();
@@ -50,20 +51,19 @@ export class ProductController {
             if (!status || !madeBy || gender == null || !size || !yob || !price) {
                 return res.status(400).json({ message: 'Missing required fields' });
             }
-    
+
             // Cập nhật sản phẩm
             const product = await ProductService.updateProduct(req.params.id, req.body);
             if (!product) {
                 return res.status(404).json({ message: 'Product not found' });
             }
     
-            res.status(200).json(product); // Trả về sản phẩm đã cập nhật với thông tin category
+            res.status(200).json(product);
         } catch (error) {
             const errorMessage = (error as Error).message;
             res.status(400).json({ message: errorMessage });
         }
     }
-    
 
     static async deleteProduct(req: Request, res: Response) {
         try {
