@@ -10,22 +10,28 @@ interface Product {
 
 export interface IOrder extends Document {
     userId: IUser["_id"],
+    staffId?: IUser["_id"],
     couponId?: ICoupon["_id"],
     totalPrice: Number,
-    status: Number,
-    paymentStatus: Number,
+    status: string,
+    paymentStatus: string,
     products: Product[]
 }
 
 const orderSchema: Schema = new Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User', // Reference to the User model
+        ref: 'User',
         required: true
+    },
+    staffId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: false
     },
     couponId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Coupon', // Reference to the Coupon model
+        ref: 'Coupon',
         required: false
     },
     totalPrice: {
@@ -33,19 +39,30 @@ const orderSchema: Schema = new Schema({
         required: true
     },
     status: {
-        type: Number,
+        type: String,
+        enum: [
+            "Pending",
+            "Completed",
+            "Cancelled",
+            "Deny"
+        ],
         required: true,
-        default: 0 // Set default status, e.g., 0 for 'pending'
+        default: "Pending"
     },
     paymentStatus: {
-        type: Number,
+        type: String,
+        enum: [
+            "Pending",
+            "Success",
+            "Cancelled",
+        ],
         required: true,
-        default: 0 // Set default payment status, e.g., 0 for 'unpaid'
+        default: "Pending"
     },
     products: [{
         productId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Product', // Reference to the Product model
+            ref: 'Product',
             required: true
         },
         price: {
@@ -54,7 +71,7 @@ const orderSchema: Schema = new Schema({
         }
     }]
 }, {
-    timestamps: true // Tự động thêm createdAt và updatedAt
+    timestamps: true
 });
 
 export const Order = mongoose.model<IOrder>('Order', orderSchema);

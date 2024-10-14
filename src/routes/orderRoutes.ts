@@ -25,6 +25,8 @@ const router = Router();
  *             properties:
  *               userId:
  *                 type: string
+ *               staffId:
+ *                 type: string
  *               couponId:
  *                 type: string
  *               products :

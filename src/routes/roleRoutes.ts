@@ -30,7 +30,7 @@ const router = Router();
  *         description: role created successfully
  */
 router.route("/")
-    .get(authenticateJWT, isManager, getAllRoles)
-    .post(authenticateJWT, isManager, createRole)
+    .get(getAllRoles)
+    .post(createRole)
 
 export default router;

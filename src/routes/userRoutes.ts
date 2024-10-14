@@ -40,8 +40,8 @@ const router = Router();
  *         description: User created successfully
  */
 router.route("/")
-    .get(authenticateJWT, isManager, UserController.getAllUsers)
-    .post(authenticateJWT, isManager, UserController.createUser)
+    .get(UserController.getAllUsers)
+    .post(UserController.createUser)
 
 /**
  * @swagger
@@ -77,8 +77,8 @@ router.route("/")
  *         description: Staff created successfully
  */
 router.route("/staff")
-    .get(authenticateJWT, isManager, UserController.getAllStaffs)
-    .post(authenticateJWT, isManager, UserController.createStaff)
+    .get(UserController.getAllStaffs)
+    .post(UserController.createStaff)
 
 /**
 * @swagger
@@ -114,7 +114,7 @@ router.route("/staff")
 *         description: Customer created successfully
 */
 router.route("/customer")
-    .get(authenticateJWT, UserController.getAllCustomers)
+    .get(UserController.getAllCustomers)
     .post(UserController.createCustomer)
 
 /**
@@ -170,7 +170,7 @@ router.route("/login")
 *          description: Change status   successfully
 */
 router.route("/:userId")
-    .get(authenticateJWT, UserController.getUserById)
-    .delete(authenticateJWT, isManager, UserController.changeStatus)
+    .get(UserController.getUserById)
+    .delete(UserController.changeStatus)
 
 export default router;
