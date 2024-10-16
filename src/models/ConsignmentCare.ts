@@ -11,6 +11,7 @@ export interface IConsignmentCare extends Document {
     totalPrice: number,
     pricePerDay: number,
     status: string,
+    paymentStatus: string
 }
 
 const consignmentCareSchema: Schema = new Schema({
@@ -21,7 +22,25 @@ const consignmentCareSchema: Schema = new Schema({
     endDate: { type: Date, required: true }, // Ngày kết thúc chăm sóc
     totalPrice: { type: Number, required: true }, // Tổng giá tiền
     pricePerDay: { type: Number, required: true }, // Giá mỗi ngày
-    status: { type: String, required: true }, // Trạng thái chăm sóc
+    status: {
+        type: String,
+        enum: [
+            "Care",
+            "Returned",
+        ],
+        required: true,
+        default: "Care"
+    },
+    paymentStatus: {
+        type: String,
+        enum: [
+            "Pending",
+            "Success",
+            "Cancelled",
+        ],
+        required: true,
+        default: "Pending"
+    },
 }, {
     timestamps: true // Tự động thêm createdAt và updatedAt
 });

@@ -37,8 +37,6 @@ const router = Router();
  *                 format: date-time
  *               pricePerDay:
  *                 type: number
- *               status:
- *                 type: string
  *     responses:
  *       201:
  *         description: Consignment Care created successfully

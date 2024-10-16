@@ -9,6 +9,7 @@ export interface IConsignmentSale extends Document {
     priceAgreed: number,
     inspectionStatus: string,
     status: string,
+    paymentStatus: string,
 }
 
 const consignmentSaleSchema: Schema = new Schema({
@@ -24,7 +25,12 @@ const consignmentSaleSchema: Schema = new Schema({
     },
     saleType: {
         type: String,
+        enum: [
+            "Offline",
+            "Online"
+        ],
         required: true,
+        default: "Offline"
     },
     priceAgreed: {
         type: Number,
@@ -32,11 +38,34 @@ const consignmentSaleSchema: Schema = new Schema({
     },
     inspectionStatus: {
         type: String,
+        enum: [
+            "Pending",
+            "Passed",
+            "Failed"
+        ],
         required: true,
+        default: "Pending"
     },
     status: {
         type: String,
+        enum: [
+            "Pending",
+            "Active",
+            "Sold",
+            "Cancelled"
+        ],
         required: true,
+        default: "Pending"
+    },
+    paymentStatus: {
+        type: String,
+        enum: [
+            "Pending",
+            "Success",
+            "Cancelled",
+        ],
+        required: true,
+        default: "Pending"
     },
 }, {
     timestamps: true // Tự động thêm createdAt và updatedAt

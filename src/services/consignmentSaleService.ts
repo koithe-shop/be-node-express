@@ -22,15 +22,20 @@ export class ConsignmentSaleService {
     }
 
     // // tao moi consignment sale
-    static async createConsignmentSale(data: IConsignmentSale) {
-        const { userId, productId, saleType, priceAgreed, inspectionStatus, status } = data;
+    static async createConsignmentSale(data: Partial<IConsignmentSale>) {
+        const { userId, productId, saleType, priceAgreed } = data;
 
         // Kiểm tra xem các trường cần thiết có bị thiếu không
-        if (!userId || !productId || !saleType || !priceAgreed || !inspectionStatus || !status) {
+        if (!userId || !productId || !saleType || !priceAgreed) {
             throw new Error("Missing fields.");
         }
 
-        const newConsignmentSale = await ConsignmentSale.create(data);
+        const newConsignmentSale = await ConsignmentSale.create({
+            ...data,
+            inspectionStatus: "Pending",
+            status: "Pending",
+            paymentStatus: "Pending"
+        });
         return newConsignmentSale
     }
 

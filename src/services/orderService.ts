@@ -8,6 +8,7 @@ export class OrderService {
         const orderList = await Order.find()
             .select("-products")
             .populate("userId", "fullName phoneNumber address")
+            .populate("staffId", "fullName")
             .populate("couponId", "discountRate")
         return orderList;
     }
@@ -15,8 +16,9 @@ export class OrderService {
     // Lấy order theo id
     static async getOrdersById(orderId: IOrder["_id"]) {
         const order = await Order.findById(orderId)
-            .populate("userId", "-password")
-            .populate("couponId")
+            .populate("userId", "fullName phoneNumber address")
+            .populate("staffId", "fullName")
+            .populate("couponId", "code discountRate")
         if (!order) {
             throw new Error("Order is not found.");
         }
@@ -24,8 +26,8 @@ export class OrderService {
     }
 
     // // tao moi order
-    static async createOrder(orderData: IOrder) {
-        const { userId, couponId, products } = orderData;
+    static async createOrder(orderData: Partial<IOrder>) {
+        const { userId, staffId, couponId, products } = orderData;
         let coupon: ICoupon | null;
         let totalFinal: number = 0;
 
@@ -47,10 +49,11 @@ export class OrderService {
 
         const newOrder = await Order.create({
             userId,
+            staffId,
             couponId,
             totalPrice: totalFinal,
-            status: 1,
-            paymentStatus: 1,
+            status: "Pending",
+            paymentStatus: "Pending",
             products
         });
         return newOrder

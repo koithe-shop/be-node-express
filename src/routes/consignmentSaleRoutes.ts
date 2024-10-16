@@ -31,10 +31,6 @@ const router = Router();
  *                 type: string
  *               priceAgreed:
  *                 type: number
- *               inspectionStatus:
- *                 type: string
- *               status:
- *                 type: string
  *     responses:
  *       201:
  *         description: Consignment sale created successfully

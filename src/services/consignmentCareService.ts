@@ -23,11 +23,11 @@ export class ConsignmentCareService {
     }
 
     // // tao moi consignment care
-    static async createConsignmentCare(data: IConsignmentCare) {
-        const { userId, productId, careType, startDate, endDate, pricePerDay, status } = data;
+    static async createConsignmentCare(data: Partial<IConsignmentCare>) {
+        const { userId, productId, careType, startDate, endDate, pricePerDay } = data;
 
         // Kiểm tra xem các trường cần thiết có bị thiếu không
-        if (!userId || !productId || !careType || !startDate || !endDate || !pricePerDay || !status) {
+        if (!userId || !productId || !careType || !startDate || !endDate || !pricePerDay) {
             throw new Error("Missing fields.");
         }
 
@@ -45,6 +45,8 @@ export class ConsignmentCareService {
         // Tạo mới ConsignmentCare với tổng tiền đã tính
         const newConsignmentCare = await ConsignmentCare.create({
             ...data,
+            status: "Care",
+            paymentStatus: "Pending",
             totalPrice // Thêm tổng tiền vào dữ liệu tạo mới
         });
 
