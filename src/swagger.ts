@@ -30,7 +30,11 @@ const swaggerOptions = {
             {
                 url: 'http://localhost:5000/api', // URL của API server
                 description: 'Development server'
-            }
+            },
+            {
+                url: 'https://be-node-express.onrender.com/api', // URL của API trên Render
+                description: 'Production server'
+            },
         ]
     },
     apis: ['./src/routes/*.ts'], // Đường dẫn đến các tệp định nghĩa route
