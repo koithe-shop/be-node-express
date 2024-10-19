@@ -17,7 +17,7 @@ import couponRoutes from './routes/couponRoutes';
 import orderRoutes from './routes/orderRoutes';
 import consignmentSaleRoutes from './routes/consignmentSaleRoutes';
 import consignmentCareRoutes from './routes/consignmentCareRoutes';
-
+import feedbackRoutes from './routes/feedbackRoutes'
 dotenv.config();
 
 const app: Application = express();
@@ -51,5 +51,6 @@ app.use('/api/coupons', couponRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/consignment_sale', consignmentSaleRoutes);
 app.use('/api/consignment_care', consignmentCareRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 module.exports = app;
