@@ -8,7 +8,7 @@ export interface IUser extends Document {
     password: string;
     phoneNumber: string;
     address: string;
-    status: boolean;
+    status: string;
     roleId: IRole["_id"] // Kiểu dữ liệu là ObjectId tham chiếu đến Role
 }
 
@@ -19,7 +19,14 @@ const userSchema: Schema = new Schema({
     password: { type: String, required: true },
     phoneNumber: { type: String, required: true },
     address: { type: String, required: true },
-    status: { type: Boolean, default: true },
+    status: {
+        type: String,
+        enum: [
+            "Active",
+            "Inactive",
+        ],
+        default: "Active"
+    },
     roleId: { type: Schema.Types.ObjectId, ref: 'Role', required: true }, // Tham chiếu đến Role
 }, {
     timestamps: true // Tự động thêm createdAt và updatedAt

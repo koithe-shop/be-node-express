@@ -77,8 +77,8 @@ router.route("/")
  *         description: Staff created successfully
  */
 router.route("/staff")
-    .get(UserController.getAllStaffs)
-    .post(UserController.createStaff)
+    .get(authenticateJWT, isManager, UserController.getAllStaffs)
+    .post(authenticateJWT, isManager, UserController.createStaff)
 
 /**
 * @swagger
@@ -114,7 +114,7 @@ router.route("/staff")
 *         description: Customer created successfully
 */
 router.route("/customer")
-    .get(UserController.getAllCustomers)
+    .get(authenticateJWT, UserController.getAllCustomers)
     .post(UserController.createCustomer)
 
 /**
@@ -156,21 +156,49 @@ router.route("/login")
 *     responses:
 *       200:
 *         description: User retrieved successfully
-*   delete:
-*      summary: Change status user by ID
-*      tags: [User]
-*      parameters:
+*   put:
+*     summary: Update user by ID
+*     tags: [User]
+*     parameters:
 *       - in: path
 *         name: userId
 *         required: true
 *         schema:
 *           type: string
-*      responses:
-*        200:
-*          description: Change status   successfully
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               fullName:
+*                 type: string
+*               phoneNumber:
+*                 type: string
+*               address:
+*                 type: string
+*               roleId:
+*                 type: string
+*     responses:
+*       200:
+*         description: Update user successfully
+*   delete:
+*     summary: Change status user by ID
+*     tags: [User]
+*     parameters:
+*       - in: path
+*         name: userId
+*         required: true
+*         schema:
+*           type: string
+*     responses:
+*       200:
+*         description: Change status successfully
 */
 router.route("/:userId")
-    .get(UserController.getUserById)
-    .delete(UserController.changeStatus)
+    .get(authenticateJWT, UserController.getUserById)
+    .put(authenticateJWT, UserController.updateUser)
+    .delete(authenticateJWT, isManager, UserController.changeStatus)
 
 export default router;
