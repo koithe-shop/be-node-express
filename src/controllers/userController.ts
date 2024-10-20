@@ -75,7 +75,7 @@ export const createCustomer = async (req: Request, res: Response) => {
 export const changeStatus = async (req: Request, res: Response) => {
     try {
         const updatedUser = await UserService.changeStatusUser(req.params.userId);
-        res.status(201).json(updatedUser);
+        res.status(200).json(updatedUser);
     } catch (error: any) {
         res.status(404).json({ message: error.message });
     }
@@ -89,5 +89,14 @@ export const login = async (req: Request, res: Response) => {
         res.status(200).json(data);
     } catch (error: any) {
         res.status(404).json({ message: error.message });
+    }
+}
+
+export const updateUser = async (req: Request, res: Response) => {
+    try {
+        const data = await UserService.updateUser(req.params.userId, req.body);
+        res.status(200).json(data);
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
     }
 }

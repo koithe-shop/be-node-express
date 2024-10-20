@@ -117,7 +117,12 @@ export class UserService {
         }
 
         // Đảo ngược trạng thái hiện tại của người dùng
-        const newStatus = !user.status;
+        let newStatus;
+        if (user.status == "Active") {
+            newStatus = "Inactive";
+        } else {
+            newStatus = "Active";
+        }
 
         // Cập nhật trạng thái mới cho người dùng
         const updatedUser = await User
@@ -131,7 +136,7 @@ export class UserService {
     // Dang nhap
     static async login(username: string, password: string) {
         // Kiểm tra xem người dùng có tồn tại hay không
-        const user = await User.findOne({ username });
+        const user = await User.findOne({ username, status: "Active" });
         if (!user) {
             throw new Error("User not found");
         }
@@ -147,6 +152,38 @@ export class UserService {
 
         // Trả về token cho người dùng
         return { token, message: 'Login successful' };
+    }
 
+    // update
+    static async updateUser(userId: String, updateData: Partial<IUser>) {
+        const { fullName, phoneNumber, address, roleId } = updateData;
+
+        const user = await User.findById(userId);
+        if (!user) {
+            throw new Error("User is not found.")
+        }
+
+        if (fullName != null && fullName != user.fullName) {
+            user.fullName = fullName
+        }
+
+        if (phoneNumber != null && phoneNumber != user.phoneNumber) {
+            user.phoneNumber = phoneNumber;
+        }
+
+        if (address != null && address != user.address) {
+            user.address = address;
+        }
+
+        if (roleId != null && roleId != user.roleId) {
+            const role = await Role.findById(roleId);
+            if (!role) {
+                throw new Error("RoleId is invalid");
+            }
+            user.roleId = role;
+        }
+        user.save();
+
+        return { user, msg: "Update user successfully." }
     }
 }
