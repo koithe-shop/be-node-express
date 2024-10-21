@@ -8,8 +8,8 @@ const JWT_SECRET = process.env.JWT_SECRET || 'default_secret';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '1h';
 
 // Tạo token
-export const generateToken = (userId: IUser["_id"]): string => {
-    return jwt.sign({ userId }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+export const generateToken = (userId: IUser["_id"], fullName: string, roleName: string): string => {
+    return jwt.sign({ userId, fullName, roleName }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
 };
 
 // Xác thực token
