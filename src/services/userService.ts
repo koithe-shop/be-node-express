@@ -141,6 +141,8 @@ export class UserService {
             throw new Error("User not found");
         }
 
+        const role = await Role.findById(user.roleId);
+
         // So sánh mật khẩu đã nhập với mật khẩu đã mã hóa trong database
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
@@ -148,7 +150,7 @@ export class UserService {
         }
 
         // Tạo JWT token
-        const token = generateToken(user._id);
+        const token = generateToken(user._id, user.fullName, role!.roleName);
 
         // Trả về token cho người dùng
         return { token, message: 'Login successful' };
