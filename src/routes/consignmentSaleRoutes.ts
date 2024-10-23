@@ -58,4 +58,60 @@ router.route("/")
 router.route("/:consignmentSaleId")
     .get(ConsignmentSaleController.getConsignmentSaleById)
 
+/**
+* @swagger
+* /consignment_sale/change_inspection_status/{consignmentSaleId}:
+*   put:
+*     summary: Change inspection status a consignment sale by ID
+*     tags: [Consignment Sale]
+*     parameters:
+*       - in: path
+*         name: consignmentSaleId
+*         required: true
+*         schema:
+*           type: string
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               inspectionStatus:
+*                 type: string
+*     responses:
+*       200:
+*         description: Change inspection status successfully
+*/
+router.route("/change_inspection_status/:consignmentSaleId")
+    .put(ConsignmentSaleController.changeInspectionStatus)
+
+/**
+* @swagger
+* /consignment_sale/change_status/{consignmentSaleId}:
+*   put:
+*     summary: Change status a consignment sale by ID
+*     tags: [Consignment Sale]
+*     parameters:
+*       - in: path
+*         name: consignmentSaleId
+*         required: true
+*         schema:
+*           type: string
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               status:
+*                 type: string
+*     responses:
+*       200:
+*         description: Change status successfully
+*/
+router.route("/change_status/:consignmentSaleId")
+    .put(ConsignmentSaleController.changeStatus)
+
 export default router;

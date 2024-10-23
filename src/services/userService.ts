@@ -15,7 +15,8 @@ export class UserService {
 
     // Lấy tất cả người dùng
     static async getAllUsers() {
-        const userList = await User.find()
+        const roleManager: any = await Role.findOne({ roleName: "Manager" })
+        const userList = await User.find({ roleId: { $ne: roleManager._id } })
             .select('-password') // Loại bỏ trường password
             .populate('roleId'); // Nếu bạn muốn populate roleId
         return userList; // Lấy tất cả người dùng

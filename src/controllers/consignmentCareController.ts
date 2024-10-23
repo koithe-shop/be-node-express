@@ -30,3 +30,13 @@ export const createConsignmentCare = async (req: Request, res: Response) => {
         res.status(400).json({ message: error.message });
     }
 };
+
+// cập nhật trạng thái
+export const updateStatusById = async (req: Request, res: Response) => {
+    try {
+        const consignmentCare = await ConsignmentCareService.updateStatusById(req.params.consignmentCareId);
+        res.status(200).json(consignmentCare);
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
+    }
+};

@@ -30,3 +30,21 @@ export const createConsignmentSale = async (req: Request, res: Response) => {
         res.status(400).json({ message: error.message });
     }
 };
+
+export const changeInspectionStatus = async (req: Request, res: Response) => {
+    try {
+        const consignmentSale = await ConsignmentSaleService.changeInspectionStatus(req.params.consignmentSaleId, req.body);
+        res.status(200).json(consignmentSale);
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+export const changeStatus = async (req: Request, res: Response) => {
+    try {
+        const consignmentSale = await ConsignmentSaleService.changeStatus(req.params.consignmentSaleId, req.body);
+        res.status(200).json(consignmentSale);
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
+    }
+};
