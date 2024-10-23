@@ -22,7 +22,7 @@ export class ConsignmentCareService {
         return consignmentCare;
     }
 
-    // // tao moi consignment care
+    // tao moi consignment care
     static async createConsignmentCare(data: Partial<IConsignmentCare>) {
         const { userId, productId, careType, startDate, endDate, pricePerDay } = data;
 
@@ -52,6 +52,28 @@ export class ConsignmentCareService {
 
         // Trả về đối tượng ConsignmentCare mới tạo
         return newConsignmentCare;
+    }
+
+    // cập nhật trạng thái
+    static async updateStatusById(consignmentCareId: IConsignmentCare["_id"]) {
+        const consignmentCare = await ConsignmentCare.findById(consignmentCareId)
+        if (!consignmentCare) {
+            throw new Error("Consignment care is not found.");
+        }
+
+        let newStatus;
+        if (consignmentCare.status == "Care") {
+            newStatus = "Returned";
+        } else {
+            newStatus = "Care";
+        }
+
+        const updatedCare = await ConsignmentCare
+            .findByIdAndUpdate(consignmentCareId, { status: newStatus }, { new: true })
+            .populate("userId", "-password")
+            .populate("productId")
+
+        return updatedCare;
     }
 
 }
