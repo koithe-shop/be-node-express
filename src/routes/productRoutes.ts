@@ -34,6 +34,8 @@ export default router;
  *         status:
  *           type: string
  *           description: Status of the product (Available, Sold, Unavailable, etc.)
+ *           default: Available
+
  *         madeBy:
  *           type: string
  *           description: Manufacturer or creator of the product

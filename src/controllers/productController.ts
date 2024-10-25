@@ -4,21 +4,28 @@ import { ProductService } from '../services/productService';
 export class ProductController {
     static async createProduct(req: Request, res: Response) {
         try {
-            const { productName, status, madeBy, gender, size, yob, price } = req.body;
-    
+            const { productName, madeBy, gender, size, yob, price } = req.body;
+            
             // Kiểm tra các trường bắt buộc
-            if (!productName || !status || !madeBy || gender == null || !size || !yob || !price) {
+            if (!productName || !madeBy || gender == null || !size || !yob || !price) {
                 return res.status(400).json({ message: 'Missing required fields' });
             }
-
+    
+            // Đặt status mặc định là 'Available'
+            const productData = {
+                ...req.body,
+                status: 'Available'
+            };
+    
             // Tạo sản phẩm
-            const product = await ProductService.createProduct(req.body);
+            const product = await ProductService.createProduct(productData);
             res.status(201).json(product);
         } catch (error) {
             const errorMessage = (error as Error).message;
             res.status(400).json({ message: errorMessage });
         }
     }
+    
 
     static async getAllProducts(req: Request, res: Response) {
         try {
