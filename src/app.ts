@@ -19,6 +19,8 @@ import consignmentSaleRoutes from './routes/consignmentSaleRoutes';
 import consignmentCareRoutes from './routes/consignmentCareRoutes';
 import feedbackRoutes from './routes/feedbackRoutes';
 import dashboardRoutes from "./routes/dashboardRoutes";
+import bankRoutes from "./routes/bankRoutes";
+import bankAccountRoutes from "./routes/bankAccountRoutes";
 
 dotenv.config();
 
@@ -55,5 +57,7 @@ app.use('/api/consignment_sale', consignmentSaleRoutes);
 app.use('/api/consignment_care', consignmentCareRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/banks', bankRoutes);
+app.use('/api/bankAccounts', bankAccountRoutes);
 
 module.exports = app;
