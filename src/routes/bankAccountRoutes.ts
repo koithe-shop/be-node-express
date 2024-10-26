@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getAllBankAccount, createBankAccount, getBankAccountById, changeStatus } from '../controllers/bankAccountController';
+import { getAllBankAccount, createBankAccount, getBankAccountById, changeStatus, getBankAccountByUserId } from '../controllers/bankAccountController';
 import { authenticateJWT, isManager } from '../middlewares/authMiddleware';
 
 const router = Router();
@@ -70,5 +70,24 @@ router.route("/")
 router.route("/:bankAccountId")
     .get(getBankAccountById)
     .delete(changeStatus)
+
+/**
+* @swagger
+* /bankAccounts/userId/{userId}:
+*   get:
+*     summary: Get a bankAccount by userID
+*     tags: [Bank Account]
+*     parameters:
+*       - in: path
+*         name: userId
+*         required: true
+*         schema:
+*           type: string
+*     responses:
+*       200:
+*         description: Bank account retrieved successfully
+*/
+router.route("/userId/:userId")
+    .get(getBankAccountByUserId)
 
 export default router;

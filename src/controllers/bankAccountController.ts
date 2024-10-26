@@ -36,3 +36,12 @@ export const changeStatus = async (req: Request, res: Response) => {
         res.status(404).json({ message: error.message });
     }
 };
+
+export const getBankAccountByUserId = async (req: Request, res: Response) => {
+    try {
+        const account = await BankAccountService.getBankAccountByUserId(req.params.userId);
+        res.status(200).json(account);
+    } catch (error: any) {
+        res.status(404).json({ messgae: error.message });
+    }
+}
