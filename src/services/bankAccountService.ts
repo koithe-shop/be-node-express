@@ -1,6 +1,6 @@
 import { BankAccount, IBankAccount } from '../models/bankAccountModel';
 import { Bank } from '../models/bankModel';
-import { User } from '../models/userModel';
+import { IUser, User } from '../models/userModel';
 
 export class BankAccountService {
     static async getAllBankAccount() {
@@ -57,5 +57,15 @@ export class BankAccountService {
             .populate("bankId")
 
         return updatedAccount;
+    }
+
+    static async getBankAccountByUserId(userId: IUser["_id"]) {
+        const account = await BankAccount.find({ userId })
+            .populate("userId", "fullName phoneNumber address")
+            .populate("bankId")
+        if (!account) {
+            throw new Error("Bank account is not found.");
+        }
+        return account;
     }
 }
