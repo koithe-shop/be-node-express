@@ -1,5 +1,6 @@
 import { ConsignmentCare, IConsignmentCare } from "../models/ConsignmentCare";
-import { differenceInDays } from 'date-fns'; // Bạn có thể sử dụng thư viện này để tính số ngày
+import { addDays, differenceInDays, isBefore, startOfDay } from 'date-fns'; // Bạn có thể sử dụng thư viện này để tính số ngày
+import { Product } from "../models/Product";
 
 export class ConsignmentCareService {
 
@@ -14,7 +15,7 @@ export class ConsignmentCareService {
     // Lấy ConsignmentCare theo id
     static async getConsignmentCareById(consignmentCareId: IConsignmentCare["_id"]) {
         const consignmentCare = await ConsignmentCare.findById(consignmentCareId)
-            .populate("userId", "-password")
+            .populate("userId", "fullName phoneNumber address")
             .populate("productId")
         if (!consignmentCare) {
             throw new Error("Consignment care is not found.");
@@ -24,33 +25,43 @@ export class ConsignmentCareService {
 
     // tao moi consignment care
     static async createConsignmentCare(data: Partial<IConsignmentCare>) {
-        const { userId, productId, careType, startDate, endDate, pricePerDay } = data;
-
-        // Kiểm tra xem các trường cần thiết có bị thiếu không
-        if (!userId || !productId || !careType || !startDate || !endDate || !pricePerDay) {
+        const { userId, productId, careType, startDate, endDate } = data;
+        if (!userId || !productId || !careType || !startDate || !endDate) {
             throw new Error("Missing fields.");
         }
-
+        if (careType != "Normal" && careType != "Special") {
+            throw new Error("Care type is invalid.");
+        }
+        // Kiểm tra nếu startDate trước ngày mai
+        const tomorrow = addDays(startOfDay(new Date()), 1);
+        if (isBefore(new Date(startDate), tomorrow)) {
+            throw new Error("Start date must be from tomorrow onward.");
+        }
         // Tính toán số ngày giữa startDate và endDate
         const numberOfDays = differenceInDays(new Date(endDate), new Date(startDate));
-
         // Nếu endDate trước startDate, ném lỗi
         if (numberOfDays < 0) {
             throw new Error("End date must be after start date.");
         }
-
-        // Tính tổng tiền = số ngày * giá mỗi ngày
+        const pricePerDay = careType == "Normal" ? 100000 : 150000;
         const totalPrice = numberOfDays * pricePerDay;
-
-        // Tạo mới ConsignmentCare với tổng tiền đã tính
         const newConsignmentCare = await ConsignmentCare.create({
             ...data,
             status: "Care",
             paymentStatus: "Pending",
-            totalPrice // Thêm tổng tiền vào dữ liệu tạo mới
+            pricePerDay,
+            totalPrice
         });
-
-        // Trả về đối tượng ConsignmentCare mới tạo
+        await Product.findByIdAndUpdate(
+            productId,
+            {
+                $set: {
+                    ownerId: userId,
+                    status: "Consigned Care",
+                }
+            },
+            { new: true }
+        );
         return newConsignmentCare;
     }
 
@@ -60,19 +71,25 @@ export class ConsignmentCareService {
         if (!consignmentCare) {
             throw new Error("Consignment care is not found.");
         }
-
         let newStatus;
         if (consignmentCare.status == "Care") {
             newStatus = "Returned";
         } else {
             newStatus = "Care";
         }
-
+        await Product.findByIdAndUpdate(
+            consignmentCare.productId,
+            {
+                $set: {
+                    status: consignmentCare.status == "Care" ? "Consigned Returned" : "Consigned Care",
+                }
+            },
+            { new: true }
+        );
         const updatedCare = await ConsignmentCare
             .findByIdAndUpdate(consignmentCareId, { status: newStatus }, { new: true })
-            .populate("userId", "-password")
-            .populate("productId")
-
+            .populate("userId", "fullName phoneNumber address")
+            .populate("productId");
         return updatedCare;
     }
 
