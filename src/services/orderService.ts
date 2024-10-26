@@ -1,5 +1,6 @@
 import { Coupon, ICoupon } from "../models/Coupon";
 import { Order, IOrder } from "../models/orderModel";
+import { Product } from "../models/Product";
 
 export class OrderService {
 
@@ -35,6 +36,7 @@ export class OrderService {
         if (!userId || !products || products.length === 0) {
             throw new Error("Missing fields.");
         }
+
         // Tính tổng giá trị đơn hàng
         const totalPrice = products.reduce((total, product) => {
             return total + product.price;
@@ -47,6 +49,7 @@ export class OrderService {
             totalFinal = totalPrice;
         }
 
+        // Tạo mới Order với tổng giá trị đã tính
         const newOrder = await Order.create({
             userId,
             staffId,
@@ -56,7 +59,18 @@ export class OrderService {
             paymentStatus: "Pending",
             products
         });
-        return newOrder
-    }
 
+        // Cập nhật status của các sản phẩm
+        const productIds = products.map(product => product.productId);
+        await Product.updateMany(
+            { _id: { $in: productIds }, status: "Consigned Sale" },
+            { $set: { status: "Consigned Sold" } }
+        );
+
+        await Product.updateMany(
+            { _id: { $in: productIds }, status: { $ne: "Consigned Sale" } },
+            { $set: { status: "Sold" } }
+        );
+        return newOrder;
+    }
 }

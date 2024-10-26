@@ -35,8 +35,6 @@ const router = Router();
  *               endDate:
  *                 type: string
  *                 format: date-time
- *               pricePerDay:
- *                 type: number
  *     responses:
  *       201:
  *         description: Consignment Care created successfully
@@ -80,7 +78,7 @@ router.route("/:consignmentCareId")
 *       200:
 *         description: Change status consignment care successfully
 */
-router.route("/change_status/:consignmentSaleId")
+router.route("/change_status/:consignmentCareId")
     .put(ConsignmentCareController.updateStatusById)
 
 export default router;
