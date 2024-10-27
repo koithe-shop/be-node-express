@@ -49,8 +49,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/roles', roleRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes); // Category routes
-app.use('/api/genotypes', genotypeRoutes);  // Genotype routes
+app.use('/api/categories', categoryRoutes); 
+app.use('/api/genotypes', genotypeRoutes);  
 app.use('/api/coupons', couponRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/consignment_sale', consignmentSaleRoutes);

@@ -5,6 +5,8 @@ const router: Router = Router();
 router.post('/', ProductController.createProduct);
 router.get('/', ProductController.getAllProducts);
 router.get('/:id', ProductController.getProductById);
+router.get('/category/:categoryId', ProductController.getProductsByCategoryId);
+
 router.put('/:id', ProductController.updateProduct);
 router.delete('/:id', ProductController.deleteProduct);
 
@@ -223,3 +225,28 @@ export default router;
  *         description: Product not found
  */
 
+/**
+ * @swagger
+ * /products/category/{categoryId}:
+ *   get:
+ *     summary: Get products by category ID
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: categoryId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Category ID
+ *     responses:
+ *       200:
+ *         description: List of products in the specified category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ *       404:
+ *         description: No products found in this category
+ */
