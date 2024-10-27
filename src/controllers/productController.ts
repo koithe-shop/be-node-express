@@ -49,7 +49,17 @@ export class ProductController {
             res.status(500).json({ message: errorMessage });
         }
     }
-
+    static async getProductsByCategoryId(req: Request, res: Response) {
+        try {
+            const { categoryId } = req.params;
+            const products = await ProductService.getProductsByCategoryId(categoryId);
+            res.status(200).json(products);
+        } catch (error) {
+            const errorMessage = (error as Error).message;
+            res.status(500).json({ message: errorMessage });
+        }
+    }
+    
     static async updateProduct(req: Request, res: Response) {
         try {
             const { productName, status, madeBy, gender, size, yob, price } = req.body;

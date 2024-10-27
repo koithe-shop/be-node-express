@@ -29,6 +29,11 @@ export class ProductService {
         return await Product.findById(id)
             .populate('categoryId genotypeId ownerId');
     }
+    static async getProductsByCategoryId(categoryId: string) {
+        return await Product.find({ categoryId })
+            .populate('categoryId genotypeId ownerId');
+    }
+    
 
     static async updateProduct(id: string, productData: Partial<IProduct>) {
         // Kiểm tra sản phẩm có tồn tại không
