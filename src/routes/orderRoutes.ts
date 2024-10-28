@@ -27,17 +27,14 @@ const router = Router();
  *                 type: string
  *               staffId:
  *                 type: string
- *               couponId:
- *                 type: string
- *               products :
+ *               products:
  *                 type: array
  *                 items:
- *                     type: object
- *                     properties:
- *                       productId:
- *                          type: string
- *                       price:
- *                          type: number
+ *                   type: string
+ *               totalPrice:
+ *                 type: integer
+ *               address:
+ *                 type: string
  *     responses:
  *       201:
  *         description: Order created successfully
@@ -64,5 +61,33 @@ router.route("/")
 */
 router.route("/:orderId")
     .get(OrderController.getOrdersById)
+
+/**
+* @swagger
+* /orders/change-payment-status/{orderId}:
+*   put:
+*     summary: Change payment status order by ID
+*     tags: [Order]
+*     parameters:
+*       - in: path
+*         name: orderId
+*         required: true
+*         schema:
+*           type: string
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               paymentStatus:
+*                 type: string
+*     responses:
+*       200:
+*         description: Change payment status order by ID successfully
+*/
+router.route("/change-payment-status/:orderId")
+    .put(OrderController.changePaymentStatus)
 
 export default router;

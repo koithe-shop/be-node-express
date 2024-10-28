@@ -21,6 +21,7 @@ import feedbackRoutes from './routes/feedbackRoutes';
 import dashboardRoutes from "./routes/dashboardRoutes";
 import bankRoutes from "./routes/bankRoutes";
 import bankAccountRoutes from "./routes/bankAccountRoutes";
+import paymentRoutes from "./routes/paymentRoutes";
 
 dotenv.config();
 
@@ -49,8 +50,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/roles', roleRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/categories', categoryRoutes); 
-app.use('/api/genotypes', genotypeRoutes);  
+app.use('/api/categories', categoryRoutes);
+app.use('/api/genotypes', genotypeRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/consignment_sale', consignmentSaleRoutes);
@@ -59,5 +60,6 @@ app.use('/api/feedback', feedbackRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/banks', bankRoutes);
 app.use('/api/bankAccounts', bankAccountRoutes);
+app.use('/api/payments', paymentRoutes);
 
 module.exports = app;

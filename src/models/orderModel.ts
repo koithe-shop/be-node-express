@@ -3,19 +3,14 @@ import { IUser } from './userModel';
 import { IProduct } from './Product';
 import { ICoupon } from './Coupon';
 
-interface Product {
-    productId: IProduct["_id"],
-    price: IProduct["price"]
-}
-
 export interface IOrder extends Document {
     userId: IUser["_id"],
     staffId?: IUser["_id"],
-    couponId?: ICoupon["_id"],
-    totalPrice: Number,
+    totalPrice: number,
     status: string,
     paymentStatus: string,
-    products: Product[]
+    products: IProduct["_id"][] // Chỉ lưu ID sản phẩm
+    address: string
 }
 
 const orderSchema: Schema = new Schema({
@@ -27,11 +22,6 @@ const orderSchema: Schema = new Schema({
     staffId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: false
-    },
-    couponId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Coupon',
         required: false
     },
     totalPrice: {
@@ -60,16 +50,14 @@ const orderSchema: Schema = new Schema({
         default: "Pending"
     },
     products: [{
-        productId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Product',
-            required: true
-        },
-        price: {
-            type: Number,
-            required: true
-        }
-    }]
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true
+    }],
+    address: {
+        type: String,
+        required: true
+    }
 }, {
     timestamps: true
 });
