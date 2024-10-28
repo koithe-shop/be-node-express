@@ -45,6 +45,19 @@ export class FeedbackController {
             res.status(500).json({ message: errorMessage });
         }
     }
+    static async getFeedbackByCategoryId(req: Request, res: Response) {
+        try {
+            const feedback = await FeedbackService.getFeedbackByCategoryId(req.params.categoryId);
+            if (!feedback || feedback.length === 0) {
+                return res.status(404).json({ message: 'No feedback found for this category' });
+            }
+            res.status(200).json(feedback);
+        } catch (error) {
+            const errorMessage = (error as Error).message;
+            res.status(500).json({ message: errorMessage });
+        }
+    }
+    
 
     static async updateFeedback(req: Request, res: Response) {
         // Validation rules

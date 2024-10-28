@@ -19,6 +19,10 @@ export class FeedbackService {
     static async getFeedbackById(id: string) {
         return await Feedback.findById(id);
     }
+    static async getFeedbackByCategoryId(categoryId: string) {
+        return await Feedback.find({ categoryId });
+    }
+    
 
     static async updateFeedback(id: string, data: Partial<IFeedback>) {
       
