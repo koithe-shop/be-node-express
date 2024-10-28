@@ -18,6 +18,10 @@ router.put('/:id', FeedbackController.updateFeedback);
 
 router.delete('/:id', FeedbackController.deleteFeedback);
 
+
+router.get('/category/:categoryId', FeedbackController.getFeedbackByCategoryId);
+
+
 export default router;
 /**
  * @swagger
@@ -63,9 +67,32 @@ export default router;
  *     responses:
  *       201:
  *         description: Feedback created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Feedback'
  *       400:
- *         description: Validation error
+ *         description: Validation error or required resource not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       msg:
+ *                         type: string
+ *                         description: Error message for missing or invalid fields
+ *                       param:
+ *                         type: string
+ *                         description: The field that caused the error
+ *       500:
+ *         description: Internal server error
  */
+
 
 /**
  * @swagger
@@ -107,6 +134,33 @@ export default router;
  *       404:
  *         description: Feedback not found
  */
+/**
+ * @swagger
+ * /feedback/category/{categoryId}:
+ *   get:
+ *     summary: Get feedback by category ID
+ *     tags: [Feedback]
+ *     parameters:
+ *       - in: path
+ *         name: categoryId
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The category ID to filter feedback
+ *     responses:
+ *       200:
+ *         description: The list of feedback for the specified category
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Feedback'
+ *       404:
+ *         description: No feedback found for this category
+ *       500:
+ *         description: Server error
+ */
 
 /**
  * @swagger
@@ -130,12 +184,33 @@ export default router;
  *     responses:
  *       200:
  *         description: Feedback updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Feedback'
  *       400:
- *         description: Validation error
+ *         description: Validation error or required resource not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 errors:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       msg:
+ *                         type: string
+ *                         description: Error message for missing or invalid fields
+ *                       param:
+ *                         type: string
+ *                         description: The field that caused the error
  *       404:
  *         description: Feedback not found
+ *       500:
+ *         description: Internal server error
  */
-
 
 /**
  * @swagger
