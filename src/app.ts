@@ -21,7 +21,6 @@ import feedbackRoutes from './routes/feedbackRoutes';
 import dashboardRoutes from "./routes/dashboardRoutes";
 import bankRoutes from "./routes/bankRoutes";
 import bankAccountRoutes from "./routes/bankAccountRoutes";
-import paymentRoutes from "./routes/paymentRoutes";
 
 dotenv.config();
 
@@ -60,6 +59,5 @@ app.use('/api/feedback', feedbackRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/banks', bankRoutes);
 app.use('/api/bankAccounts', bankAccountRoutes);
-app.use('/api/payments', paymentRoutes);
 
 module.exports = app;
