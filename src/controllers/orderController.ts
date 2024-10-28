@@ -30,3 +30,12 @@ export const createOrder = async (req: Request, res: Response) => {
         res.status(400).json({ message: error.message });
     }
 };
+
+export const changePaymentStatus = async (req: Request, res: Response) => {
+    try {
+        const order = await OrderService.changePaymentStatus(req.params.orderId, req.body);
+        res.status(200).json(order);
+    } catch (error: any) {
+        res.status(404).json({ message: error.message });
+    }
+};
