@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(
-    'sk_test_51QDr1gIqcInfzhBvJ5rZlRgzNxvDkT6QsHnZ9pmeEIHtrrS0dsN95TzKqUayzdn8rdf7mJHie30V32CXlLhBNi7l00D5XJkSow'
-);
+const stripe = new Stripe('sk_test_51QDr1gIqcInfzhBvJ5rZlRgzNxvDkT6QsHnZ9pmeEIHtrrS0dsN95TzKqUayzdn8rdf7mJHie30V32CXlLhBNi7l00D5XJkSow');
 
 // Controller để tạo PaymentIntent
 export const createPaymentIntent = async (req: Request, res: Response) => {
