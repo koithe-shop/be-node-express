@@ -10,7 +10,6 @@ export class OrderService {
             .select("-products")
             .populate("userId", "fullName phoneNumber address")
             .populate("staffId", "fullName")
-            .populate("couponId", "discountRate")
         return orderList;
     }
 
@@ -19,7 +18,7 @@ export class OrderService {
         const order = await Order.findById(orderId)
             .populate("userId", "fullName phoneNumber address")
             .populate("staffId", "fullName")
-            .populate("couponId", "code discountRate")
+            .populate("products")
         if (!order) {
             throw new Error("Order is not found.");
         }
@@ -43,7 +42,7 @@ export class OrderService {
             status: "Pending",
             paymentStatus: "Pending",
             products,
-            address
+            address,
         });
 
         // Cập nhật status của các sản phẩm
