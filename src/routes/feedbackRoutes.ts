@@ -156,8 +156,7 @@ export default router;
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Feedback'
- *       404:
- *         description: No feedback found for this category
+ 
  *       500:
  *         description: Server error
  */
