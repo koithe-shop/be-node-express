@@ -25,6 +25,55 @@ export class ProductController {
             res.status(400).json({ message: errorMessage });
         }
     }
+    // Thêm vào trong ProductController
+static async createConsignedSaleProduct(req: Request, res: Response) {
+    try {
+        const { productName, madeBy, gender, size, yob, price } = req.body;
+        
+        // Kiểm tra các trường bắt buộc
+        if (!productName || !madeBy || gender == null || !size || !yob || !price) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+
+        // Đặt status mặc định là 'Consigned Sale'
+        const productData = {
+            ...req.body,
+            status: 'Consigned Sale'
+        };
+
+        // Tạo sản phẩm
+        const product = await ProductService.createProduct(productData);
+        res.status(201).json(product);
+    } catch (error) {
+        const errorMessage = (error as Error).message;
+        res.status(400).json({ message: errorMessage });
+    }
+}
+
+static async createConsignedCareProduct(req: Request, res: Response) {
+    try {
+        const { productName, madeBy, gender, size, yob, price } = req.body;
+        
+        // Kiểm tra các trường bắt buộc
+        if (!productName || !madeBy || gender == null || !size || !yob || !price) {
+            return res.status(400).json({ message: 'Missing required fields' });
+        }
+
+        // Đặt status mặc định là 'Consigned Care'
+        const productData = {
+            ...req.body,
+            status: 'Consigned Care'
+        };
+
+        // Tạo sản phẩm
+        const product = await ProductService.createProduct(productData);
+        res.status(201).json(product);
+    } catch (error) {
+        const errorMessage = (error as Error).message;
+        res.status(400).json({ message: errorMessage });
+    }
+}
+
     
 
     static async getAllProducts(req: Request, res: Response) {
