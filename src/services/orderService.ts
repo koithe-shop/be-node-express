@@ -1,6 +1,7 @@
-import { Coupon, ICoupon } from "../models/Coupon";
+import { ConsignmentSale } from "../models/ConsignmentSale";
 import { Order, IOrder } from "../models/orderModel";
 import { Product } from "../models/Product";
+import { IUser } from "../models/userModel";
 
 export class OrderService {
 
@@ -22,6 +23,14 @@ export class OrderService {
         if (!order) {
             throw new Error("Order is not found.");
         }
+        return order;
+    }
+
+    // Lấy order theo user` id
+    static async getOrdersByUserId(userId: IUser["_id"]) {
+        const order = await Order.findById(userId)
+            .populate("staffId", "fullName")
+            .populate("products")
         return order;
     }
 
@@ -79,6 +88,11 @@ export class OrderService {
             { _id: { $in: order!.products }, status: "Consigned Sale" },
             { $set: { status: "Consigned Sold" } }
         );
+
+        await ConsignmentSale.updateMany(
+            { productId: { $in: order!.products } },
+            { $set: { status: "Sold" } }
+        )
 
         await Product.updateMany(
             { _id: { $in: order!.products }, status: { $ne: "Consigned Sale" } },

@@ -21,6 +21,16 @@ export const getOrdersById = async (req: Request, res: Response) => {
     }
 };
 
+// Lấy order theo user id
+export const getOrdersByUserId = async (req: Request, res: Response) => {
+    try {
+        const order = await OrderService.getOrdersByUserId(req.params.orderId);
+        res.status(200).json(order);
+    } catch (error: any) {
+        res.status(404).json({ message: error.message });
+    }
+};
+
 // Tạo một order mới
 export const createOrder = async (req: Request, res: Response) => {
     try {

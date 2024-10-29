@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getAllBanks } from '../controllers/bankController';
-import { authenticateJWT, isManager } from '../middlewares/authMiddleware';
+import { authenticateJWT, isActive, isManager } from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -15,6 +15,6 @@ const router = Router();
  *         description: List of banks
  */
 router.route("/")
-    .get(getAllBanks)
+    .get(authenticateJWT, isActive, getAllBanks)
 
 export default router;

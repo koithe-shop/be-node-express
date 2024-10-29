@@ -30,6 +30,16 @@ export class ConsignmentCareService {
         if (!userId || !productId || !careType || !startDate || !endDate) {
             throw new Error("Missing fields.");
         }
+        const product = await Product.findById(productId)
+        if (!product) {
+            throw new Error("Product Id is invalid.");
+        } else {
+            await Product.findByIdAndUpdate(
+                productId,
+                { ownerId: userId, status: "Consigned Care", },
+                { new: true }
+            )
+        }
         if (careType != "Normal" && careType != "Special") {
             throw new Error("Care type is invalid.");
         }
@@ -53,16 +63,6 @@ export class ConsignmentCareService {
             pricePerDay,
             totalPrice
         });
-        await Product.findByIdAndUpdate(
-            productId,
-            {
-                $set: {
-                    ownerId: userId,
-                    status: "Consigned Care",
-                }
-            },
-            { new: true }
-        );
         return newConsignmentCare;
     }
 
@@ -89,6 +89,35 @@ export class ConsignmentCareService {
         );
         const updatedCare = await ConsignmentCare
             .findByIdAndUpdate(consignmentCareId, { status: newStatus }, { new: true })
+            .populate("userId", "fullName phoneNumber address")
+            .populate("productId");
+        return updatedCare;
+    }
+
+    // cập nhật trạng thái thanh toan
+    static async updatePaymentStatusById(consignmentCareId: IConsignmentCare["_id"], body: { paymentStatus: string }) {
+        const consignmentCare = await ConsignmentCare.findById(consignmentCareId)
+        if (!consignmentCare) {
+            throw new Error("Consignment care is not found.");
+        }
+        const { paymentStatus } = body;
+        if (paymentStatus != "Success" && paymentStatus != "Cancelled") {
+            throw new Error("Payment status is invalid.");
+        }
+        if (paymentStatus == "Cancelled") {
+            await ConsignmentCare.findByIdAndUpdate(
+                consignmentCareId,
+                { status: "Returned" },
+                { new: true }
+            )
+            await Product.findByIdAndUpdate(
+                consignmentCare.productId,
+                { status: "Consigned Returned" },
+                { new: true }
+            )
+        }
+        const updatedCare = await ConsignmentCare
+            .findByIdAndUpdate(consignmentCareId, { paymentStatus: paymentStatus }, { new: true })
             .populate("userId", "fullName phoneNumber address")
             .populate("productId");
         return updatedCare;
