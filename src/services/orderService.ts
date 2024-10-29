@@ -45,16 +45,6 @@ export class OrderService {
             address,
         });
 
-        // Cập nhật status của các sản phẩm
-        await Product.updateMany(
-            { _id: { $in: products }, status: "Consigned Sale" },
-            { $set: { status: "Consigned Sold" } }
-        );
-
-        await Product.updateMany(
-            { _id: { $in: products }, status: { $ne: "Consigned Sale" } },
-            { $set: { status: "Sold" } }
-        );
         return newOrder;
     }
 
@@ -83,7 +73,18 @@ export class OrderService {
         )
             .populate("userId", "fullName phoneNumber address")
             .populate("staffId", "fullName")
-            .populate("couponId", "code discountRate")
+
+        // Cập nhật status của các sản phẩm
+        await Product.updateMany(
+            { _id: { $in: order!.products }, status: "Consigned Sale" },
+            { $set: { status: "Consigned Sold" } }
+        );
+
+        await Product.updateMany(
+            { _id: { $in: order!.products }, status: { $ne: "Consigned Sale" } },
+            { $set: { status: "Sold" } }
+        );
+
         if (!order) {
             throw new Error("Order is not found.");
         }
