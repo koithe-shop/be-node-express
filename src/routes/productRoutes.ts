@@ -6,6 +6,9 @@ router.post('/', ProductController.createProduct);
 router.get('/', ProductController.getAllProducts);
 router.get('/:id', ProductController.getProductById);
 router.get('/category/:categoryId', ProductController.getProductsByCategoryId);
+// Thêm các route này vào trong file router
+router.post('/consigned-sale', ProductController.createConsignedSaleProduct);
+router.post('/consigned-care', ProductController.createConsignedCareProduct);
 
 router.put('/:id', ProductController.updateProduct);
 router.delete('/:id', ProductController.deleteProduct);
@@ -249,4 +252,94 @@ export default router;
  *                 $ref: '#/components/schemas/Product'
  *       404:
  *         description: No products found in this category
+ */
+/**
+ * @swagger
+ * /products/consigned-sale:
+ *   post:
+ *     summary: Create a new product with status Consigned Sale
+ *     tags: [Products]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       201:
+ *         description: Product created successfully with status Consigned Sale
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       400:
+ *         description: Bad request
+ */
+
+/**
+ * @swagger
+ * /products/consigned-care:
+ *   post:
+ *     summary: Create a new product with status Consigned Care
+ *     tags: [Products]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       201:
+ *         description: Product created successfully with status Consigned Care
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       400:
+ *         description: Bad request
+ */
+/**
+ * @swagger
+ * /products/consigned-sale:
+ *   post:
+ *     summary: Create a new product with status Consigned Sale
+ *     tags: [Products]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       201:
+ *         description: Product created successfully with status Consigned Sale
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       400:
+ *         description: Bad request
+ */
+
+/**
+ * @swagger
+ * /products/consigned-care:
+ *   post:
+ *     summary: Create a new product with status Consigned Care
+ *     tags: [Products]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       201:
+ *         description: Product created successfully with status Consigned Care
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       400:
+ *         description: Bad request
  */
