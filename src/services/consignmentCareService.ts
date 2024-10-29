@@ -1,6 +1,7 @@
 import { ConsignmentCare, IConsignmentCare } from "../models/ConsignmentCare";
 import { addDays, differenceInDays, isBefore, startOfDay } from 'date-fns'; // Bạn có thể sử dụng thư viện này để tính số ngày
 import { Product } from "../models/Product";
+import { IUser } from "../models/userModel";
 
 export class ConsignmentCareService {
 
@@ -93,4 +94,10 @@ export class ConsignmentCareService {
         return updatedCare;
     }
 
+    // Lấy ConsignmentCare theo id
+    static async getByUserId(userId: IUser["_id"]) {
+        const consignmentCare = await ConsignmentCare.find({ userId: userId })
+            .populate("productId")
+        return consignmentCare;
+    }
 }

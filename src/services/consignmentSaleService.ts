@@ -1,4 +1,5 @@
 import { ConsignmentSale, IConsignmentSale } from "../models/ConsignmentSale";
+import { IUser } from "../models/userModel";
 
 export class ConsignmentSaleService {
 
@@ -77,5 +78,12 @@ export class ConsignmentSaleService {
             .populate("productId")
 
         return updatedSale;
+    }
+
+    // Lấy ConsignmentSale theo id
+    static async getByUserId(userId: IUser["_id"]) {
+        const consignmentSale = await ConsignmentSale.find({ userId: userId })
+            .populate("productId")
+        return consignmentSale;
     }
 }
