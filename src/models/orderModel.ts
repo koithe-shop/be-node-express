@@ -1,7 +1,6 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import { IUser } from './userModel';
 import { IProduct } from './Product';
-import { ICoupon } from './Coupon';
 
 export interface IOrder extends Document {
     userId: IUser["_id"],
