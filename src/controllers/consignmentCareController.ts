@@ -41,6 +41,16 @@ export const updateStatusById = async (req: Request, res: Response) => {
     }
 };
 
+// cập nhật trạng thái thanh toan
+export const updatePaymentStatusById = async (req: Request, res: Response) => {
+    try {
+        const consignmentCare = await ConsignmentCareService.updatePaymentStatusById(req.params.consignmentCareId, req.body);
+        res.status(200).json(consignmentCare);
+    } catch (error: any) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
 export const getByUserId = async (req: Request, res: Response) => {
     try {
         const consignmentCare = await ConsignmentCareService.getByUserId(req.params.userId);

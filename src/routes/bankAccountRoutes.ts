@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getAllBankAccount, createBankAccount, getBankAccountById, changeStatus, getBankAccountByUserId } from '../controllers/bankAccountController';
-import { authenticateJWT, isManager } from '../middlewares/authMiddleware';
+import { authenticateJWT, isActive, isManager } from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -36,8 +36,8 @@ const router = Router();
  *         description: Account created successfully
  */
 router.route("/")
-    .get(getAllBankAccount)
-    .post(createBankAccount)
+    .get(authenticateJWT, isActive, getAllBankAccount)
+    .post(authenticateJWT, isActive, createBankAccount)
 
 /**
 * @swagger
@@ -68,8 +68,8 @@ router.route("/")
 *         description: Change status successfully
 */
 router.route("/:bankAccountId")
-    .get(getBankAccountById)
-    .delete(changeStatus)
+    .get(authenticateJWT, isActive, getBankAccountById)
+    .delete(authenticateJWT, isActive, changeStatus)
 
 /**
 * @swagger
@@ -88,6 +88,6 @@ router.route("/:bankAccountId")
 *         description: Bank account retrieved successfully
 */
 router.route("/userId/:userId")
-    .get(getBankAccountByUserId)
+    .get(authenticateJWT, isActive, getBankAccountByUserId)
 
 export default router;

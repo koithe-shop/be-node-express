@@ -1,4 +1,5 @@
 import { ConsignmentSale, IConsignmentSale } from "../models/ConsignmentSale";
+import { Product } from "../models/Product";
 import { IUser } from "../models/userModel";
 
 export class ConsignmentSaleService {
@@ -25,12 +26,20 @@ export class ConsignmentSaleService {
     // // tao moi consignment sale
     static async createConsignmentSale(data: Partial<IConsignmentSale>) {
         const { userId, productId, saleType, priceAgreed } = data;
-
         // Kiểm tra xem các trường cần thiết có bị thiếu không
         if (!userId || !productId || !saleType || !priceAgreed) {
             throw new Error("Missing fields.");
         }
-
+        const product = await Product.findById(productId)
+        if (!product) {
+            throw new Error("Product Id is invalid.");
+        } else {
+            await Product.findByIdAndUpdate(
+                productId,
+                { ownerId: userId, status: "Consigned Sale" },
+                { new: true }
+            )
+        }
         const newConsignmentSale = await ConsignmentSale.create({
             ...data,
             inspectionStatus: "Pending",
@@ -46,37 +55,57 @@ export class ConsignmentSaleService {
         if (inspectionStatus != "Passed" && inspectionStatus != "Failed") {
             throw new Error("Inspection status is invalid.");
         }
-
         const consignmentSale = await ConsignmentSale.findById(consignmentSaleId)
         if (!consignmentSale) {
             throw new Error("Consignment sale is not found.");
         }
-
+        if (inspectionStatus == "Failed") {
+            await ConsignmentSale.findByIdAndUpdate(
+                consignmentSaleId,
+                { status: "Cancelled", paymentStatus: "Cancelled" },
+                { new: true }
+            )
+            await Product.findByIdAndUpdate(
+                consignmentSale.productId,
+                { status: "Consigned Returned" },
+                { new: true }
+            )
+        } else if (inspectionStatus == "Passed") {
+            await ConsignmentSale.findByIdAndUpdate(
+                consignmentSaleId,
+                { status: "Active" },
+                { new: true }
+            )
+        }
         const updatedSale = await ConsignmentSale
             .findByIdAndUpdate(consignmentSaleId, { inspectionStatus: inspectionStatus }, { new: true })
             .populate("userId", "-password")
             .populate("productId")
-
         return updatedSale;
     }
 
     // Cập nhật status
     static async changeStatus(consignmentSaleId: IConsignmentSale["_id"], body: { status: string }) {
         const { status } = body;
-        if (status != "Pending" && status != "Active" && status != "Sold" && status != "Cancelled") {
+        if (status != "Cancelled") {
             throw new Error("Status is invalid.");
         }
-
         const consignmentSale = await ConsignmentSale.findById(consignmentSaleId)
         if (!consignmentSale) {
             throw new Error("Consignment sale is not found.");
         }
-
+        await Product.findByIdAndUpdate(
+            consignmentSale.productId,
+            { status: "Consigned Returned" },
+            { new: true }
+        )
         const updatedSale = await ConsignmentSale
-            .findByIdAndUpdate(consignmentSaleId, { status: status }, { new: true })
+            .findByIdAndUpdate(
+                consignmentSaleId,
+                { status: status, paymentStatus: "Cancelled" },
+                { new: true })
             .populate("userId", "-password")
             .populate("productId")
-
         return updatedSale;
     }
 

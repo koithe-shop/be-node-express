@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import * as UserController from '../controllers/userController';
-import { authenticateJWT, isManager } from '../middlewares/authMiddleware';
+import { authenticateJWT, isActive, isManager } from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -40,8 +40,8 @@ const router = Router();
  *         description: User created successfully
  */
 router.route("/")
-    .get(UserController.getAllUsers)
-    .post(UserController.createUser)
+    .get(authenticateJWT, isActive, UserController.getAllUsers)
+    .post(authenticateJWT, isManager, UserController.createUser)
 
 /**
  * @swagger
@@ -114,7 +114,7 @@ router.route("/staff")
 *         description: Customer created successfully
 */
 router.route("/customer")
-    .get(authenticateJWT, UserController.getAllCustomers)
+    .get(authenticateJWT, isActive, UserController.getAllCustomers)
     .post(UserController.createCustomer)
 
 /**
@@ -197,8 +197,8 @@ router.route("/login")
 *         description: Change status successfully
 */
 router.route("/:userId")
-    .get(authenticateJWT, UserController.getUserById)
-    .put(authenticateJWT, UserController.updateUser)
+    .get(authenticateJWT, isActive, UserController.getUserById)
+    .put(authenticateJWT, isActive, UserController.updateUser)
     .delete(authenticateJWT, isManager, UserController.changeStatus)
 
 export default router;

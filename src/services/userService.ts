@@ -13,6 +13,12 @@ export class UserService {
         else return false;
     }
 
+    static async isActive(userId: IUser["_id"]) {
+        const user = await User.findOne({ _id: userId, status: "Active" });
+        if (user) return true;
+        else return false;
+    }
+
     // Lấy tất cả người dùng
     static async getAllUsers() {
         const roleManager: any = await Role.findOne({ roleName: "Manager" })

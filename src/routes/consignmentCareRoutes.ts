@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import * as ConsignmentCareController from '../controllers/consignmentCareController';
-import { authenticateJWT, isManager } from '../middlewares/authMiddleware';
+import { authenticateJWT, isActive, isManager } from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -40,8 +40,8 @@ const router = Router();
  *         description: Consignment Care created successfully
  */
 router.route("/")
-    .get(ConsignmentCareController.getAllConsignmentCare)
-    .post(ConsignmentCareController.createConsignmentCare)
+    .get(authenticateJWT, isActive, ConsignmentCareController.getAllConsignmentCare)
+    .post(authenticateJWT, isActive, ConsignmentCareController.createConsignmentCare)
 
 /**
 * @swagger
@@ -60,7 +60,7 @@ router.route("/")
 *         description: Consignment care retrieved successfully
 */
 router.route("/:consignmentCareId")
-    .get(ConsignmentCareController.getConsignmentCareById)
+    .get(authenticateJWT, isActive, ConsignmentCareController.getConsignmentCareById)
 
 /**
 * @swagger
@@ -79,7 +79,35 @@ router.route("/:consignmentCareId")
 *         description: Change status consignment care successfully
 */
 router.route("/change_status/:consignmentCareId")
-    .put(ConsignmentCareController.updateStatusById)
+    .put(authenticateJWT, isActive, ConsignmentCareController.updateStatusById)
+
+/**
+* @swagger
+* /consignment_care/change_payment_status/{consignmentCareId}:
+*   put:
+*     summary: Change payment status a consignment care by ID
+*     tags: [Consignment Care]
+*     parameters:
+*       - in: path
+*         name: consignmentCareId
+*         required: true
+*         schema:
+*           type: string
+*     requestBody:
+*       required: true
+*       content:
+*         application/json:
+*           schema:
+*             type: object
+*             properties:
+*               paymentStatus:
+*                 type: string
+*     responses:
+*       200:
+*         description: Change payment status consignment care successfully
+*/
+router.route("/change_payment_status/:consignmentCareId")
+    .put(authenticateJWT, isActive, ConsignmentCareController.updatePaymentStatusById)
 
 /**
 * @swagger
@@ -98,6 +126,6 @@ router.route("/change_status/:consignmentCareId")
 *         description: Get by userID successfully
 */
 router.route("/userId/:userId")
-    .get(ConsignmentCareController.getByUserId)
+    .get(authenticateJWT, isActive, ConsignmentCareController.getByUserId)
 
 export default router;

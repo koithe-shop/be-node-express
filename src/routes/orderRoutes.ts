@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import * as OrderController from '../controllers/orderController';
-import { authenticateJWT, isManager } from '../middlewares/authMiddleware';
+import { authenticateJWT, isActive, isManager } from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -40,8 +40,8 @@ const router = Router();
  *         description: Order created successfully
  */
 router.route("/")
-    .get(OrderController.getAllOrders)
-    .post(OrderController.createOrder)
+    .get(authenticateJWT, isActive, OrderController.getAllOrders)
+    .post(authenticateJWT, isActive, OrderController.createOrder)
 
 /**
 * @swagger
@@ -60,7 +60,26 @@ router.route("/")
 *         description: Order retrieved successfully
 */
 router.route("/:orderId")
-    .get(OrderController.getOrdersById)
+    .get(authenticateJWT, isActive, OrderController.getOrdersById)
+
+/**
+* @swagger
+* /orders/userId/{userId}:
+*   get:
+*     summary: Get a order by userID
+*     tags: [Order]
+*     parameters:
+*       - in: path
+*         name: userId
+*         required: true
+*         schema:
+*           type: string
+*     responses:
+*       200:
+*         description: Order retrieved successfully
+*/
+router.route("/userId/:orderId")
+    .get(authenticateJWT, isActive, OrderController.getOrdersByUserId)
 
 /**
 * @swagger
@@ -88,6 +107,6 @@ router.route("/:orderId")
 *         description: Change payment status order by ID successfully
 */
 router.route("/change-payment-status/:orderId")
-    .put(OrderController.changePaymentStatus)
+    .put(authenticateJWT, isActive, OrderController.changePaymentStatus)
 
 export default router;

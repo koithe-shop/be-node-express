@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import * as ConsignmentSaleController from '../controllers/consignmentSaleController';
-import { authenticateJWT, isManager } from '../middlewares/authMiddleware';
+import { authenticateJWT, isActive, isManager } from '../middlewares/authMiddleware';
 
 const router = Router();
 
@@ -36,8 +36,8 @@ const router = Router();
  *         description: Consignment sale created successfully
  */
 router.route("/")
-    .get(ConsignmentSaleController.getAllConsignmentSale)
-    .post(ConsignmentSaleController.createConsignmentSale)
+    .get(authenticateJWT, isActive, ConsignmentSaleController.getAllConsignmentSale)
+    .post(authenticateJWT, isActive, ConsignmentSaleController.createConsignmentSale)
 
 /**
 * @swagger
@@ -56,7 +56,7 @@ router.route("/")
 *         description: Consignment sale retrieved successfully
 */
 router.route("/:consignmentSaleId")
-    .get(ConsignmentSaleController.getConsignmentSaleById)
+    .get(authenticateJWT, isActive, ConsignmentSaleController.getConsignmentSaleById)
 
 /**
 * @swagger
@@ -84,7 +84,7 @@ router.route("/:consignmentSaleId")
 *         description: Change inspection status successfully
 */
 router.route("/change_inspection_status/:consignmentSaleId")
-    .put(ConsignmentSaleController.changeInspectionStatus)
+    .put(authenticateJWT, isActive, ConsignmentSaleController.changeInspectionStatus)
 
 /**
 * @swagger
@@ -112,7 +112,7 @@ router.route("/change_inspection_status/:consignmentSaleId")
 *         description: Change status successfully
 */
 router.route("/change_status/:consignmentSaleId")
-    .put(ConsignmentSaleController.changeStatus)
+    .put(authenticateJWT, isActive, ConsignmentSaleController.changeStatus)
 
 /**
 * @swagger
@@ -131,6 +131,6 @@ router.route("/change_status/:consignmentSaleId")
 *         description: Get by user ID successfully
 */
 router.route("/userId/:userId")
-    .get(ConsignmentSaleController.getByUserId)
+    .get(authenticateJWT, isActive, ConsignmentSaleController.getByUserId)
 
 export default router;

@@ -21,6 +21,16 @@ export const authenticateJWT = (req: Request, res: Response, next: NextFunction)
     }
 };
 
+export const isActive = async (req: Request, res: Response, next: NextFunction) => {
+    const user = (req as any).user;
+    const isActive = await UserService.isActive(user.userId)
+    if (isActive) {
+        next();
+    } else {
+        res.sendStatus(403); // Forbidden
+    }
+}
+
 export const isManager = async (req: Request, res: Response, next: NextFunction) => {
     const user = (req as any).user;
     const isManager = await UserService.isManager(user.userId);
