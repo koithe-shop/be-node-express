@@ -48,8 +48,11 @@ export default router;
  *           description: The rating score (1-5)
  *         date:
  *           type: string
- *           format: date
+ *           format: date-time
  *           description: The date of the feedback
+ *         username:
+ *           type: string
+ *           description: The username of the feedback provider (populated from User model)
  */
 
 /**
@@ -93,7 +96,6 @@ export default router;
  *         description: Internal server error
  */
 
-
 /**
  * @swagger
  * /feedback:
@@ -126,14 +128,17 @@ export default router;
  *         description: The feedback ID
  *     responses:
  *       200:
- *         description: Feedback data
+ *         description: Feedback data including username populated from User model
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Feedback'
  *       404:
  *         description: Feedback not found
+ *       500:
+ *         description: Internal server error
  */
+
 /**
  * @swagger
  * /feedback/category/{categoryId}:
@@ -149,16 +154,15 @@ export default router;
  *         description: The category ID to filter feedback
  *     responses:
  *       200:
- *         description: The list of feedback for the specified category
+ *         description: The list of feedback for the specified category including username populated from User model
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Feedback'
- 
  *       500:
- *         description: Server error
+ *         description: Internal server error
  */
 
 /**
@@ -182,7 +186,7 @@ export default router;
  *             $ref: '#/components/schemas/Feedback'
  *     responses:
  *       200:
- *         description: Feedback updated successfully
+ *         description: Feedback updated successfully including username populated from User model
  *         content:
  *           application/json:
  *             schema:
@@ -229,4 +233,6 @@ export default router;
  *         description: Feedback deleted successfully
  *       404:
  *         description: Feedback not found
+ *       500:
+ *         description: Internal server error
  */

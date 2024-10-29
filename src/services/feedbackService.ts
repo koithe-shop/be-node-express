@@ -1,5 +1,5 @@
 import { IFeedback, Feedback } from '../models/Feedback';
-import { User } from '../models/userModel'
+import { User } from '../models/userModel';
 import { Category } from '../models/Category';
 
 export class FeedbackService {
@@ -25,26 +25,28 @@ export class FeedbackService {
         const feedback = new Feedback(data);
         return await feedback.save();
     }
+
     static async getAllFeedback() {
-        return await Feedback.find();
+        // Lấy tất cả feedbacks và thêm username từ userId
+        return await Feedback.find().populate('userId', 'username');
     }
 
     static async getFeedbackById(id: string) {
-        return await Feedback.findById(id);
+        // Lấy feedback theo ID và thêm username từ userId
+        return await Feedback.findById(id).populate('userId', 'username');
     }
+
     static async getFeedbackByCategoryId(categoryId: string) {
-        return await Feedback.find({ categoryId });
+        // Lấy feedbacks theo categoryId và thêm username từ userId
+        return await Feedback.find({ categoryId }).populate('userId', 'username');
     }
-    
 
     static async updateFeedback(id: string, data: Partial<IFeedback>) {
-        // Kiểm tra sự tồn tại của feedback
         const existingFeedback = await Feedback.findById(id);
         if (!existingFeedback) {
             throw new Error('Feedback not found');
         }
 
-        // Kiểm tra sự tồn tại của userId (nếu có trong data)
         if (data.userId) {
             const userExists = await User.findById(data.userId);
             if (!userExists) {
@@ -52,7 +54,6 @@ export class FeedbackService {
             }
         }
 
-        // Kiểm tra sự tồn tại của categoryId (nếu có trong data)
         if (data.categoryId) {
             const categoryExists = await Category.findById(data.categoryId);
             if (!categoryExists) {
@@ -60,8 +61,9 @@ export class FeedbackService {
             }
         }
 
-        return await Feedback.findByIdAndUpdate(id, data, { new: true });
+        return await Feedback.findByIdAndUpdate(id, data, { new: true }).populate('userId', 'username');
     }
+
     static async deleteFeedback(id: string) {
         return await Feedback.findByIdAndDelete(id);
     }
