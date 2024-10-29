@@ -40,3 +40,12 @@ export const updateStatusById = async (req: Request, res: Response) => {
         res.status(400).json({ message: error.message });
     }
 };
+
+export const getByUserId = async (req: Request, res: Response) => {
+    try {
+        const consignmentCare = await ConsignmentCareService.getByUserId(req.params.userId);
+        res.status(200).json(consignmentCare);
+    } catch (error: any) {
+        res.status(404).json({ message: error.message });
+    }
+};

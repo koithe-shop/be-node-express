@@ -48,3 +48,13 @@ export const changeStatus = async (req: Request, res: Response) => {
         res.status(400).json({ message: error.message });
     }
 };
+
+// Lấy consignmentSale theo id
+export const getByUserId = async (req: Request, res: Response) => {
+    try {
+        const consignmentSale = await ConsignmentSaleService.getByUserId(req.params.userId);
+        res.status(200).json(consignmentSale);
+    } catch (error: any) {
+        res.status(404).json({ message: error.message });
+    }
+};

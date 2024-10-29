@@ -81,4 +81,23 @@ router.route("/:consignmentCareId")
 router.route("/change_status/:consignmentCareId")
     .put(ConsignmentCareController.updateStatusById)
 
+/**
+* @swagger
+* /consignment_care/userId/{userId}:
+*   get:
+*     summary: Get by userID
+*     tags: [Consignment Care]
+*     parameters:
+*       - in: path
+*         name: userId
+*         required: true
+*         schema:
+*           type: string
+*     responses:
+*       200:
+*         description: Get by userID successfully
+*/
+router.route("/userId/:userId")
+    .get(ConsignmentCareController.getByUserId)
+
 export default router;
