@@ -63,9 +63,6 @@ export class BankAccountService {
         const account = await BankAccount.find({ userId })
             .populate("userId", "fullName phoneNumber address")
             .populate("bankId")
-        if (!account) {
-            throw new Error("Bank account is not found.");
-        }
         return account;
     }
 }
