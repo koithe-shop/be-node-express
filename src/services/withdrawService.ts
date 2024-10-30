@@ -88,7 +88,7 @@ export class WithdrawService {
         return newWithdraw;
     }
 
-    static async changeStatus(withdrawId: IWithdraw["_id"], body: { status: IWithdraw["status"] }) {
+    static async changeStatus(withdrawId: IWithdraw["_id"], body: { status: string }) {
         // Tìm người dùng theo ID
         const withdraw = await Withdraw.findById(withdrawId);
         if (!withdraw) {
@@ -99,7 +99,7 @@ export class WithdrawService {
             throw new Error("Status is invalid.");
         }
         if (status == "Completed") {
-            await ConsignmentSale.findById(
+            const data = await ConsignmentSale.findByIdAndUpdate(
                 withdraw.consignmentSaleId,
                 { paymentStatus: "Success" },
                 { new: true }
