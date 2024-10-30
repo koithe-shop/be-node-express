@@ -73,6 +73,10 @@ export class WithdrawService {
         if (!consignmentSale) {
             throw new Error("ConsignmentSaleId is invalid.")
         }
+        const withdraw = await Withdraw.findOne({ consignmentSaleId: consignmentSaleId })
+        if (withdraw) {
+            throw new Error("Withdraw is existed.")
+        }
         let amount = 0;
         if (consignmentSale.saleType == "Offline") {
             amount = consignmentSale.priceAgreed * 0.9
