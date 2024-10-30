@@ -34,8 +34,8 @@ const router = Router();
  *         description: Withdraw created successfully
  */
 router.route("/")
-    .get(withdrawController.getAllWithdraw)
-    .post(withdrawController.createWithdraw)
+    .get(authenticateJWT, isActive, withdrawController.getAllWithdraw)
+    .post(authenticateJWT, isActive, withdrawController.createWithdraw)
 
 /**
 * @swagger
@@ -75,8 +75,8 @@ router.route("/")
 *         description: Change status successfully
 */
 router.route("/:withdrawId")
-    .get(withdrawController.getWithdrawById)
-    .delete(withdrawController.changeStatus)
+    .get(authenticateJWT, isActive, withdrawController.getWithdrawById)
+    .delete(authenticateJWT, isActive, isManager, withdrawController.changeStatus)
 
 /**
 * @swagger
@@ -95,6 +95,6 @@ router.route("/:withdrawId")
 *         description: Withdraw retrieved successfully
 */
 router.route("/userId/:userId")
-    .get(withdrawController.getWithdrawByUserId)
+    .get(authenticateJWT, isActive, isManager, withdrawController.getWithdrawByUserId)
 
 export default router;
