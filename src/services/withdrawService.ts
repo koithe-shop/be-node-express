@@ -69,7 +69,7 @@ export class WithdrawService {
         if (!bankAccount) {
             throw new Error("BankAccountId is invalid.")
         }
-        const consignmentSale = await ConsignmentSale.findOne({ _id: consignmentSaleId, paymentStatus: "Pending" });
+        const consignmentSale = await ConsignmentSale.findOne({ _id: consignmentSaleId, status: "Sold", paymentStatus: "Pending" });
         if (!consignmentSale) {
             throw new Error("ConsignmentSaleId is invalid.")
         }
