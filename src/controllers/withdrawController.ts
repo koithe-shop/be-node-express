@@ -24,7 +24,7 @@ export const createWithdraw = async (req: Request, res: Response) => {
         const withdraw = await WithdrawService.createWithdraw(req.body);
         res.status(201).json(withdraw);
     } catch (error: any) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
