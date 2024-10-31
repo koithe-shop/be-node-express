@@ -28,7 +28,7 @@ export class OrderService {
 
     // Lấy order theo user` id
     static async getOrdersByUserId(userId: IUser["_id"]) {
-        const order = await Order.findById({ userId: userId })
+        const order = await Order.find({ userId: userId })
             .populate("staffId", "fullName")
             .populate("products")
         return order;
